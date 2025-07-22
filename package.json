@@ -15,7 +15,7 @@
     "build:app3": "parcel build National-Contributions-Map/index.html --dist-dir ./dist/National-Contributions-Map --public-url ./",
     "build:app4": "parcel build National-Contributions-Table/index.html --dist-dir ./dist/National-Contributions-Table --public-url ./",
     "build:app5": "vite build --config CRU-Timeseries/vite.config.mjs",
-    "build": "npm run build:app2 && npm run build:app3 && npm run build:app4 && npm run build:app5"
+    "build": "npm run build:app1 && npm run build:app1-2024 && npm run build:app2 && npm run build:app3 && npm run build:app4 && npm run build:app5"
   },
   "author": "Tom Jenkins",
   "license": "ISC",
