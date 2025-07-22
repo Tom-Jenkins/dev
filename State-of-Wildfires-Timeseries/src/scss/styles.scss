@@ -1,0 +1,85 @@
+// Import Bootswatch Flaty theme CSS
+@import "./bootstrap.min.css";
+
+// Import all of Bootstrap's CSS
+// @import "bootstrap/scss/bootstrap";
+// @import "../../node_modules/bootstrap/dist/css/bootstrap.min.css"
+
+// Import Choices CSS
+// @import "../../node_modules/choices.js/public/assets/styles/choices.min.css";
+
+// Variables
+:root {
+    --choices3-width: 100%;
+}
+
+// ------------------- //
+// Custom styles
+// ------------------- //
+
+// Font
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+// Plot
+#plot {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+// Choices.js custom styles
+.choices__list--dropdown {
+    z-index: 1001;
+    text-align: start;
+    margin-bottom: 0;
+}
+
+.choices__inner {
+    font-size: 16px !important;
+    height: 20px;
+    line-height: 20px;
+    text-align: start;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    padding-top: 8.5px !important;
+}
+
+.is-open[data-type*="select-multiple"] .choices__inner {
+    height: fit-content;
+}
+.choices.is-open[data-type*="select-multiple"]  {
+    position: absolute;
+    z-index: 1000;
+    width: var(--choices3-width);
+}
+
+// Region items
+.choices__list--multiple .choices__item {
+    padding: 3px 6px !important;
+    font-size: .9rem !important;
+    // background-color: #55c2da !important;
+    background-image: linear-gradient(to right, #55c2da, #02b3ca) !important;
+    border: none !important;
+    border-radius: 10px !important;
+}
+.choices__button {
+    border-color: white !important;
+}
+
+
+// Modal styles
+.modal-dialog {
+    height: 90%;
+    overflow-y: auto;
+}
+.modal-content {
+    // width: 550px !important;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.superscript {
+    vertical-align: super;
+    font-size: smaller;
+}

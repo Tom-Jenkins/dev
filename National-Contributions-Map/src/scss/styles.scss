@@ -1,0 +1,190 @@
+// Import Bootswatch Flaty theme CSS
+@import "./bootstrap.min.css";
+
+// ------------------- //
+// Leaflet Map Styles
+// ------------------- //
+
+// Font
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+// Title content
+.title-container {
+  display: flex; // flexbox to align children
+  justify-content: space-between; // space between the two elements
+  align-items: center; // vertically align items to the center
+}
+
+// Popups for portrait mobiles
+.popupCustom .leaflet-popup-content-wrapper,
+.popupCustom .leaflet-popup-tip {
+  background: white;
+  opacity: 1;
+  color: black;
+  font-size: 1.1em;
+  text-align: center;
+  width: 225px;
+  max-height: 275px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.popupCustom .leaflet-popup-content {
+  margin: 10px;
+}
+
+// Popups for tablets and above
+@media (min-width: 576px) {
+  .popupCustom .leaflet-popup-content-wrapper,
+  .popupCustom .leaflet-popup-tip {
+    background: white;
+    opacity: 1;
+    color: black;
+    font-size: 1.1em;
+    text-align: center;
+    width: 275px;
+    max-height: 275px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .popupCustom .leaflet-popup-content {
+    margin: 10px;
+  }
+}
+
+// Popups for laptop screens and above
+@media (min-width: 992px) {
+  .popupCustom .leaflet-popup-content-wrapper,
+  .popupCustom .leaflet-popup-tip {
+    background: white;
+    opacity: 1;
+    color: black;
+    font-size: 1.1em;
+    text-align: center;
+    width: 300px;
+    max-height: 275px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .popupCustom .leaflet-popup-content {
+    margin: 10px;
+  }
+
+  .leaflet-popup-tip-container {
+    display: none;
+  }
+}
+
+// Display information styles
+.displayInfo {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  cursor: grab !important;
+}
+.displayInfo h4 {
+  margin: 0 0 5px;
+  color: #777;
+  font-size: 1.1em;
+}
+.displayInfo b {
+  font-size: 1.1em;
+}
+#display-info-widget {
+  height: 72px;
+}
+
+// Legend styles
+.legend {
+  line-height: 18px;
+  color: #555;
+  cursor: grab;
+}
+.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.8;
+}
+.legend-text {
+  float: right;
+  font-weight: 500;
+}
+
+// Legend title
+#legend-title {
+  cursor: pointer;
+}
+
+// Tooltip style for legend title
+.legendTooltip {
+  position: absolute;
+  width: max-content;
+  margin-top: -2rem;
+  margin-left: -8px;
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+// Modal styles
+.modal-dialog {
+  height: 90%;
+  overflow-y: auto;
+}
+.modal-content {
+  // width: 550px !important;
+  height: 100%;
+  overflow-y: auto;
+}
+
+// Choices.js custom styles
+.choices__list--dropdown {
+  z-index: 1001 !important;
+  text-align: start;
+  // white-space: pre-line;
+}
+.choices__inner {
+  padding-bottom: 0;
+  font-size: 16px !important;
+  height: 20px;
+  line-height: 20px;
+  text-align: start;
+  padding-left: 5px;
+}
+.choices__list--dropdown .choices__item--selectable,
+.choices__list[aria-expanded] .choices__item--selectable {
+  /* Choices.js sets this to 100px to account for itemSelectText. But we disable that,
+    so we want to use the normal padding it would otherwise use of 10px. */
+  padding-right: 10px !important;
+}
+
+// Custom control button
+.custom-control-button {
+  cursor: pointer;
+}
+
+// EU toggle switch
+#eu-switch:focus {
+  box-shadow: none;
+}
+
+// Extra small button class
+.btn-xs {
+  padding: 0.4rem 0.4rem;
+  font-size: 0.875rem;
+  line-height: 0.7;
+  border-radius: 0.2rem;
+  margin-bottom: 2px;
+}
+.btn-xs:active {
+  color: white !important;
+  background-color: var(--bs-btn-bg) !important;
+  border-color: var(--bs-btn-bg) !important;
+}

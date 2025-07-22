@@ -1,0 +1,95 @@
+// Import Bootswatch Flaty theme CSS
+@import "./bootstrap.min.css";
+
+// ------------------- //
+// Tablulator Styles
+// ------------------- //
+
+// Font
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+// Title content
+.title-container {
+    display: flex; // flexbox to align children
+    justify-content: space-between; // space between the two elements
+    align-items: center; // vertically align items to the center
+}
+
+// Choices.js custom styles
+.choices__list--dropdown {
+    z-index: 1001 !important;
+    text-align: start;
+}
+.choices__inner {
+    padding-bottom: 0;
+    font-size: 16px !important;
+    height: 20px;
+    line-height: 20px;
+    text-align: start;
+    padding-left: 5px;
+}
+
+// Tabulator table
+// #tabulator-table {
+//     outline: 0.10em solid black;
+// }
+
+// Tabulator value row height
+.tabulator-row {
+    height: 35px;
+}
+.tabulator-cell {
+    padding: 0;
+    line-height: 18px; // adjust cell padding to ensure content is centered
+}
+
+// Extra small button class
+.btn-xs {
+    padding: .40rem .40rem;
+    font-size: .875rem;
+    line-height: .70;
+    border-radius: .2rem;
+    margin-bottom: 2px;
+}
+.btn-xs:active {
+    color: white !important;
+    background-color: var(--bs-btn-bg) !important;
+    border-color: var(--bs-btn-bg) !important;
+}
+
+// Tooltip style for information icon
+.info-icon-style {
+    position: absolute;
+    width: 100%;
+    white-space: normal;
+    // margin-top: -1rem;
+    margin-left: 6rem;
+    background: #333;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+// Country select dropdown
+#country-select {
+    width: 105%;
+    height: 2rem;
+    font-size: 0.95rem;
+    color: grey;
+}
+#country-select:focus-visible {
+    outline: none;
+}
+
+// Row freezing styles
+.tabulator-frozen-rows-holder > .tabulator-row {
+    background-color: rgb(249, 249, 229) !important;
+}
+
+.tabulator .tabulator-header {
+    border-top: 1.5px solid #dee2e6 !important;
+    border-bottom: 2.5px solid rgb(210, 208, 208) !important;
+}

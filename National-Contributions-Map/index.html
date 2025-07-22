@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>National Contributions Map</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="./src/scss/styles.scss">
+        <!-- JavaScript -->
+        <script defer type="module" src="./src/js/app.js"></script>
+    </head>
+    <body>
+        <div class="container-fluid text-center">
+            <!-- Title -->
+            <div class="title-container">
+            <h3 class="text-start">National Contributions to Global Warming</h3>
+                <span class="text-end">
+                    <button id="btn-reset" class="btn btn-secondary btn-xs" title="Reset Choices">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                            <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                            <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                        </svg>                 
+                    </button>
+                    <button id="btn-download-data" class="btn btn-secondary btn-xs" title="Download Data">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1z"/>
+                            <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708z"/>
+                        </svg>                   
+                    </button>
+                </span>
+            </div>
+            <h6 class="text-start">Calculated as the percentage contribution of each country to increases in Global Mean Surface Temperature (GMST)</h6>
+            <!-- Row: Select Input Titles -->
+            <div class="row">
+                <div class="col text-start fw-bold fs-5" style="margin-left:5px;">Source</div>
+                <div class="col text-start fw-bold fs-5" style="margin-left:5px;">Greenhouse Gas</div>
+                <div class="col text-start fw-bold fs-5" style="margin-left:5px;">
+                    <span class="pe-1">Time Period</span>
+                    <button id="btn-animate" class="btn btn-secondary btn-xs">Animate</button>
+                </div>
+            </div>
+            <!-- Row: Select Data To Display -->
+            <div class="row py-2">
+                <div class="col-lg-4 col-sm-12">
+                    <!-- Source Selector -->
+                    <select id="source-selector" class="form-select" style="display: none;" aria-label="source-selector">
+                        <!-- note: value must be the same as the geojson name property -->
+                        <option value="Total" selected>Fossil Fuels and Land Use Change</option>
+                        <option value="Fossil">Fossil Fuels</option>
+                        <option value="Land">Land Use Change</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <!-- Greenhouse Gas Selector -->
+                    <select id="gas-selector" class="form-select" style="display: none;" aria-label="gas-selector">
+                        <!-- note: value must be the same as the geojson name property -->
+                        <option value="3GHG" selected>All Greenhouse Gases</option>
+                        <option value="CO2">Carbon Dioxide</option>
+                        <option value="CH4">Methane</option>
+                        <option value="N2O">Nitrous Oxide</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <!-- Time Period Selector -->
+                    <select id="period-selector" class="form-select" style="display: none;" aria-label="period-selector">
+                        <!-- note: value must be the same as the geojson name property -->
+                        <option value="1851" selected>From 1851 to 2022</option>
+                        <option value="1990">From 1990 to 2022</option>
+                        <option value="2005">From 2005 to 2022</option>
+                        <option value="2020">From 2020 to 2022</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Row: Leaflet Interactive Map -->
+            <div class="row px-2 pb-2">
+                <div id="map" style="height: 500px;"></div>
+            </div>
+            <!-- Row: Footer-->
+            <div class="row">
+                <p class="px-2 text-center text-secondary" style="font-size: 0.95em; padding-top: 5px; margin-bottom: 0px;">
+                    <span class="pe-2">
+                        <a class="text-secondary" href="https://creativecommons.org/licenses/by/4.0/deed.en" target="_blank" style="text-decoration: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cc-circle" viewBox="0 0 16 16">
+                                <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.408 5.89c-.83 0-1.318.64-1.318 1.753v.742c0 1.108.479 1.727 1.318 1.727.69 0 1.138-.435 1.187-1.05h1.147v.114c-.058 1.147-1.029 1.938-2.343 1.938-1.612 0-2.518-1.028-2.518-2.729v-.747c0-1.7.914-2.75 2.518-2.75 1.319 0 2.29.812 2.343 1.999v.11H6.595c-.049-.638-.506-1.108-1.187-1.108Zm5.404 0c-.831 0-1.319.64-1.319 1.753v.742c0 1.108.48 1.727 1.319 1.727.69 0 1.138-.435 1.186-1.05h1.147v.114c-.057 1.147-1.028 1.938-2.342 1.938-1.613 0-2.518-1.028-2.518-2.729v-.747c0-1.7.914-2.75 2.518-2.75 1.318 0 2.29.812 2.342 1.999v.11h-1.147c-.048-.638-.505-1.108-1.186-1.108Z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                            </svg>
+                            <span style="vertical-align: text-top;">CC BY 4.0</span>
+                        </a>
+                    </span>
+                    <span class="text-secondary" style="vertical-align: text-top;">Credit:&nbsp;</span>                  
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
+                        <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+                    </svg>
+                    <span class="pe-2" style="vertical-align: text-top;">
+                        <a class="text-secondary" href="https://doi.org/10.1038/s41597-023-02041-1" target="_blank" style="text-decoration: none;">Jones et al. (2023)</a>
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database" viewBox="0 0 16 16">
+                        <path d="M4.318 2.687C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4c0-.374.356-.875 1.318-1.313M13 5.698V7c0 .374-.356.875-1.318 1.313C10.766 8.729 9.464 9 8 9s-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777A5 5 0 0 0 13 5.698M14 4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16s3.022-.289 4.096-.777C13.125 14.755 14 14.007 14 13zm-1 4.698V10c0 .374-.356.875-1.318 1.313C10.766 11.729 9.464 12 8 12s-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10s3.022-.289 4.096-.777A5 5 0 0 0 13 8.698m0 3V13c0 .374-.356.875-1.318 1.313C10.766 14.729 9.464 15 8 15s-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13s3.022-.289 4.096-.777c.324-.147.633-.323.904-.525"/>
+                    </svg>
+                    <span class="pe-2" style="vertical-align: text-top;">
+                        <a class="text-secondary" href="https://doi.org/10.5281/zenodo.10839859" target="_blank" style="text-decoration: none;">Access Full Database</a>
+                    </span>
+                    <!-- <span class="pe-2" style="vertical-align: text-top;">
+                        <a class="text-secondary" href="https://twitter.com/Jones_MattW" target="_blank" style="text-decoration: none;">@Jones_MattW</a>
+                    </span> -->
+                    <span style="vertical-align: text-top;">
+                        <a class="text-secondary" href="https://tomjenkins.co.uk/" target="_blank" style="text-decoration: none;">
+                            <span>
+                                App:
+                                <svg height="15" style="margin-bottom: 4px;" xmlns="http://www.w3.org/2000/svg" version="1.0" preserveAspectRatio="xMidYMid meet" viewBox="119.9 155 272.2 202">
+                                    <g fill="#95a5a6" stroke="none" stroke-width="50" transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)">
+                                        <path d="M3570 2933 c0 -692 -3 -737 -55 -814 -13 -21 -46 -51 -72 -66 -41 -24 -59 -28 -124 -28 -67 0 -81 4 -125 30 -39 25 -56 44 -83 97 -29 58 -34 79 -39 162 l-5 96 -172 0 -173 0 5 -82 c12 -219 68 -367 181 -477 112 -110 225 -151 417 -151 63 0 137 7 174 15 148 35 271 135 341 278 74 151 73 139 77 900 l4 677 -176 0 -175 0 0 -637z"/>
+                                        <path d="M2791 3244 c-12 -15 -21 -33 -21 -40 0 -12 -127 -14 -779 -14 l-779 0 -6 -92 c-3 -51 -6 -103 -7 -116 -1 -31 28 -62 58 -62 32 0 63 17 63 35 0 8 6 15 12 15 7 0 107 -31 223 -69 115 -38 297 -97 404 -131 l194 -62 -48 -48 c-33 -33 -59 -50 -84 -55 -20 -4 -55 -15 -78 -25 l-43 -19 0 -79 c0 -43 3 -82 7 -85 3 -4 14 4 22 17 24 36 281 324 312 349 14 12 76 68 137 125 61 56 117 102 125 102 13 0 203 -208 196 -214 -2 -2 -96 -8 -207 -14 -135 -6 -208 -14 -215 -22 -12 -13 218 -8 465 9 l103 7 28 -29 c22 -23 32 -28 55 -23 31 8 62 40 62 66 0 60 -86 86 -124 37 -19 -24 -29 -27 -76 -26 l-55 1 -103 116 -103 117 155 3 156 3 0 55 c0 43 4 56 18 61 32 11 52 36 52 65 0 64 -80 92 -119 42z m-321 -230 c0 -4 -21 -25 -47 -47 -27 -23 -93 -85 -148 -139 l-100 -97 -255 80 c-390 122 -590 190 -590 200 0 5 231 9 570 9 314 0 570 -3 570 -6z"/>
+                                        <path d="M1532 2819 c-13 -5 -29 -22 -34 -37 -9 -24 -19 -30 -63 -38 -48 -9 -53 -8 -69 14 -37 49 -128 0 -112 -61 16 -65 85 -77 121 -20 16 26 29 33 70 41 42 7 53 6 70 -9 11 -10 33 -19 48 -21 25 -3 43 -25 143 -185 112 -179 114 -182 108 -228 l-7 -46 -185 -126 c-159 -108 -187 -124 -203 -115 -47 30 -99 -4 -99 -62 0 -85 124 -88 132 -3 3 29 16 41 150 132 80 55 164 112 185 127 35 25 41 26 76 15 l37 -12 0 -317 0 -318 170 0 170 0 0 575 c0 316 -4 575 -8 575 -13 0 -271 -288 -315 -350 -8 -12 -27 -22 -42 -23 -25 -2 -33 7 -83 88 -30 50 -83 135 -119 189 -57 88 -63 102 -54 123 16 36 14 51 -14 78 -26 27 -37 29 -73 14z"/>
+                                    </g>
+                                </svg>
+                                <span>Data Visualisation</span>
+                            </span>                            
+                        </a>
+                    </span>                   
+                </p>
+            </div>
+        </div>
+        <!-- Modal: Information About Data -->
+        <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLabel">National Contributions to Global Warming</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-wrap">
+
+                        <p>
+                            The interactive map shows the contributions of each country to the rise in <strong>global mean surface temperature (GMST)</strong> for different <strong>periods since 1851</strong>, as reported by <strong>Jones et al. (2023a)</strong> and updated in <strong>Jones et al. (2023b)</strong>.
+                        </p>
+                        <p>
+                            National contributions are assessed for <strong>three different greenhouse gases</strong> &ndash; carbon dioxide (CO<sub>2</sub>), methane (CH<sub>4</sub>) and nitrous oxide (N<sub>2</sub>O) &ndash; as well as for the sum across the three gases.
+                        </p>
+                        <p>
+                            National contributions are also assessed for <strong>two emissions sectors</strong> &ndash; fossil fuel emissions and land use change emissions &ndash; as well as the sum of those sectors. 
+                        </p>
+                        <p>
+                            The <strong>"EU27" toggle</strong> can be used to either aggregate or disaggregate the contributions from EU27 member states.
+                        </p>
+
+                        <p class="text-start fw-bold">Method summary</p>
+                        <p>
+                            Warming caused by emissions in each country is calculated following the methods presented by <strong>Jones et al. (2023a)</strong>. Briefly:
+                            <ul>
+                                <li>Warming caused by each country’s CO<sub>2</sub> emissions is calculated using the <strong>transient climate response to cumulative CO<sub>2</sub> emissions (TCRE)</strong> value of 1.65°C per 1000 PgC<sup>a</sup>.</li>
+                                <li>Warming caused by each country’s <strong>CH<sub>4</sub> emissions</strong> is calculated by applying the TCRE value to the calculated CO<sub>2</sub>-equivalent emissions. CO<sub>2</sub>-equivalent emissions are calculated over a 100-year time horizon using the <strong>global warming potential star (GWP*) approach<sup>b,c</sup></strong>.</li>
+                                <li>Warming caused by each country’s <strong>N<sub>2</sub>O emissions</strong> is calculated by applying the TCRE value to the calculated CO<sub>2</sub>-equivalent emissions. CO<sub>2</sub>-equivalent emissions are calculated over a 100-year time horizon using the <strong>global warming potential (GWP) approach<sup>b</sup></strong>.</li>
+                            </ul>
+                        </p>
+
+                        <p>
+                            <sup>a</sup>The <strong>TCRE</strong> value of 1.65°C per 1000 PgC is as reported by the Intergovernmental Panel on Climate Change (IPCC) in its Sixth Assessment Report (AR6; Candadell et al. 2021). 
+                        </p>
+                        <p>
+                            <sup>b</sup><strong>GWP</strong> values are as reported by the IPCC (Forster et al. 2021): 29.8 for CH<sub>4</sub> from fossil fuels, 27.2 for CH<sub>4</sub> from land use change, and 273 for N<sub>2</sub>O (all sources).
+                        </p>
+                        <p>
+                            <sup>c</sup>The <strong>GWP* method</strong> is a modification of the GWP method that <strong>adjusts for the short atmospheric lifetime of CH<sub>4</sub></strong>. GWP* does not apply to N<sub>2</sub>O because it, like CO<sub>2</sub>, is a long-lived greenhouse gas. 
+                        </p>
+                    
+                        <p class="text-start fw-bold">Data sources</p>
+                        <p class="text-start">
+                            The source of data for CO<sub>2</sub> emissions from fossil fuels is Andrew and Peters (2023), as used in the Global Carbon Budget (Friedlingstein et al. 2023). The source of data for CO<sub>2</sub> emissions from land use change is the Global Carbon Budget (Friedlingstein et al. 2023).
+                        </p>
+                        <p class="text-start">
+                            The source of data for CH<sub>4</sub> and N<sub>2</sub>O emissions from both the fossil fuel and land use change sectors derive from the Potsdam Realtime Integrated Model for probabilistic Assessment of emissions Paths dataset (PRIMAP-hist) dataset (Gütschow et al. 2023).
+                        </p> 
+                        <p>Note: All emissions data represent <strong>territorial emissions</strong> and exclude emissions embodied in trade. </p>
+
+                        <p class="text-start fw-bold">Please cite as:</p>
+                        <p class="text-start">
+                            Jones, M. W., Peters, G. P., Gasser, T., Andrew, R. M., Schwingshackl, C., Gütschow, J., Houghton, R. A., Friedlingstein, P., Pongratz, J., Le Quéré, C. (2023a). National contributions to climate change due to historical emissions of carbon dioxide, methane, and nitrous oxide since 1850, <span class="fst-italic">Scientific Data</span>, 10(155), <a href="https://doi.org/10.1038/s41597-023-02041-1" target="_blank" class="text-secondary">https://doi.org/10.1038/s41597-023-02041-1</a>.
+                        </p> 
+                        <p class="text-start">
+                            Jones, M. W., Peters, G. P., Gasser, T., Andrew, R. M., Schwingshackl, C., Gütschow, J., Houghton, R. A., Friedlingstein, P., Pongratz, J., Le Quéré, C. (2023b). National contributions to climate change due to historical emissions of carbon dioxide, methane, and nitrous oxide since 1850 [Data set]. <em>Zenodo</em>. <a href="https://doi.org/10.5281/zenodo.10839859" target="_blank" class="text-secondary">https://doi.org/10.5281/zenodo.10839859</a>. 
+                        </p>
+
+                        <p class="text-start fw-bold">References to emission data sources:</p>
+                        <p>
+                            Andrew, R. M., Peters, G. P. (2023). The Global Carbon Project's fossil CO<sub>2</sub> emissions dataset. <em>Zenodo</em>. <a href="https://zenodo.org/records/10177738" target="_blank" class="text-secondary">https://zenodo.org/records/10177738</a>.
+                        </p>
+                        <p>
+                            Friedlingstein, P., et al. (2023). Global Carbon Budget 2023. <em>Earth System Science Data</em>, 15, 5301–5369, <a href="https://doi.org/10.5194/essd-15-5301-2023" target="_blank" class="text-secondary">https://doi.org/10.5194/essd-15-5301-2023</a>. 
+                        </p>
+                        <p>
+                            Gütschow, J., Pflüger, M., Busch, D. (2023). The PRIMAP-hist national historical emissions time series v2.5.1 (1750-2022). <em>Zenodo</em>. <a href="https://zenodo.org/doi/10.5281/zenodo.4479171" target="_blank" class="text-secondary">https://zenodo.org/doi/10.5281/zenodo.4479171</a>. 
+                        </p>
+                        <p>
+                            Forster, P., et al. (2021). The Earth's Energy Budget, Climate Feedbacks, and Climate Sensitivity. In: <em>Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change</em> [Masson-Delmotte, V., P. Zhai, A. Pirani, S. L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M. I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T. K. Maycock, T. Waterfield, O. Yelekçi, R. Yu and B. Zhou (eds.)]. <em>Cambridge University Press, Cambridge, United Kingdom and New York, NY, USA, pp. 923–1054</em>, <a href="https://doi.org/10.1017/9781009157896.009" target="_blank" class="text-secondary">https://doi.org/10.1017/9781009157896.009</a>.
+                        </p>
+                        <p>
+                            Canadell, J. G. et al. (2021). Global Carbon and other Biogeochemical Cycles and Feedbacks. In: <em>Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change</em> [Masson-Delmotte, V., P. Zhai, A. Pirani, S. L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M. I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T. K. Maycock, T. Waterfield, O. Yelekçi, R. Yu and B. Zhou (eds.)]. <em>Cambridge University Press, Cambridge, United Kingdom and New York, NY, USA, pp. 673–816</em>, <a href="https://doi.org/10.1017/9781009157896.007" target="_blank" class="text-secondary">https://doi.org/10.1017/9781009157896.007</a>.
+                        </p>
+                    
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>                      
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </body>
+</html>

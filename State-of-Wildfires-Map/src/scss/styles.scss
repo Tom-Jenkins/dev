@@ -1,0 +1,174 @@
+// Import Bootswatch Flaty theme CSS
+@import "./bootstrap.min.css";
+
+// Import all of Bootstrap's CSS
+// @import "bootstrap/scss/bootstrap";
+// @import "../../node_modules/bootstrap/dist/css/bootstrap.min.css"
+
+// Import library CSS
+// @import "../../node_modules/leaflet/dist/leaflet.css";
+// @import "../../node_modules/choices.js/public/assets/styles/choices.min.css";
+
+// ------------------- //
+// Leaflet Map Styles
+// ------------------- //
+
+// Font
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+// Popups for portrait mobiles
+.popupCustom .leaflet-popup-content-wrapper,
+.popupCustom .leaflet-popup-tip {
+    background: white;
+    opacity: 1;
+    color: black;
+    font-size: 1.1em;
+    text-align: center;
+    width: 225px;           /* Set the width to XXXpx */
+    max-height: 200px;      /* Set the maximum height to XXXpx */
+    overflow-y: auto;       /* Add a vertical scrollbar if content exceeds height */
+    overflow-x: hidden;     /* Prevent horizontal scrollbar */
+}
+.popupCustom .leaflet-popup-content {
+    margin: 10px;
+}
+
+// Popups for tablets and above
+@media (min-width: 576px) { 
+    .popupCustom .leaflet-popup-content-wrapper,
+    .popupCustom .leaflet-popup-tip {
+        background: white;
+        opacity: 1;
+        color: black;
+        font-size: 1.1em;
+        text-align: center;
+        width: 275px;           /* Set the width to XXXpx */
+        max-height: 250px;      /* Set the maximum height to XXXpx */
+        overflow-y: auto;       /* Add a vertical scrollbar if content exceeds height */
+        overflow-x: hidden;     /* Prevent horizontal scrollbar */
+    }
+    .popupCustom .leaflet-popup-content {
+        margin: 10px;
+    }
+}
+
+// Popups for laptop screens
+@media (min-width: 992px) { 
+    .popupCustom .leaflet-popup-content-wrapper,
+    .popupCustom .leaflet-popup-tip {
+        background: white;
+        opacity: 1;
+        color: black;
+        font-size: 1.1em;
+        text-align: center;
+        width: 300px;           /* Set the width to XXXpx */
+        max-height: 300px;      /* Set the maximum height to XXXpx */
+        overflow-y: auto;       /* Add a vertical scrollbar if content exceeds height */
+        overflow-x: hidden;     /* Prevent horizontal scrollbar */
+    }
+    .popupCustom .leaflet-popup-content {
+        margin: 10px;
+    }
+}
+
+// Popups for large screen sizes
+@media (min-width: 1400px) { 
+    .popupCustom .leaflet-popup-content-wrapper,
+    .popupCustom .leaflet-popup-tip {
+        background: white;
+        opacity: 1;
+        color: black;
+        font-size: 1.1em;
+        text-align: center;
+        width: 350px;           /* Set the width to XXXpx */
+        max-height: 350px;      /* Set the maximum height to XXXpx */
+        overflow-y: auto;       /* Add a vertical scrollbar if content exceeds height */
+        overflow-x: hidden;     /* Prevent horizontal scrollbar */
+    }
+    .popupCustom .leaflet-popup-content {
+        margin: 10px;
+    }
+}
+
+// Display information styles
+.displayInfo {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    cursor: grab !important;
+}
+.displayInfo h4 {
+    margin: 0 0 5px;
+    color: #777;
+    font-size: 1.2em;
+}
+
+// Legend styles
+.legend {
+    line-height: 18px;
+    color: #555;
+    cursor: grab;
+}
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.8;
+}
+.legend-text {
+    float: right;
+    font-weight: 500;
+}
+
+// Legend title
+#legend-title {
+    cursor: pointer;
+}
+
+// Tooltip style for legend title
+.legendTooltip {
+    position: absolute;
+    width: max-content;
+    margin-top: -2.5rem;
+    margin-left: -8px;
+    background: #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+// Modal styles
+.modal-dialog{
+    height: 90%;
+    overflow-y: auto;
+}
+.modal-content {
+    // width: 550px !important;
+    height: 100%;
+    overflow-y: auto;
+}
+
+// Choices.js custom styles
+.choices__list--dropdown {
+    z-index: 1001 !important;
+    text-align: start;
+}
+.choices__inner {
+    padding-bottom: 0;
+    font-size: 16px !important;
+    height: 20px;
+    line-height: 20px;
+    text-align: start;
+    padding-left: 5px;
+}
+
+// Custom control button
+.custom-control-button {
+    cursor: pointer;
+}

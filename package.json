@@ -1,0 +1,82 @@
+{
+  "name": "uea-climate-visualisations",
+  "version": "3.0.0",
+  "description": "Interactive Data Visualisations for UEA Climate",
+  "scripts": {
+    "wildfires-map": "parcel State-of-Wildfires-Map/index.html --port 3000",
+    "wildfires-map-2024": "parcel State-of-Wildfires-Map-2024/index.html --port 3001",
+    "wildfires-timeseries": "parcel State-of-Wildfires-Timeseries/index.html --port 3002",
+    "contributions-map": "parcel National-Contributions-Map/index.html --port 3003",
+    "contributions-table": "parcel National-Contributions-Table/index.html --port 3004",
+    "cru-timeseries": "vite --config CRU-Timeseries/vite.config.mjs --port 4000",
+    "build:app1": "parcel build State-of-Wildfires-Map/index.html --dist-dir ./dist/State-of-Wildfires-Map --public-url ./",
+    "build:app1-2024": "parcel build State-of-Wildfires-Map-2024/index.html --dist-dir ./dist/State-of-Wildfires-Map-2024 --public-url ./",
+    "build:app2": "parcel build State-of-Wildfires-Timeseries/index.html --dist-dir ./dist/State-of-Wildfires-Timeseries --public-url ./",
+    "build:app3": "parcel build National-Contributions-Map/index.html --dist-dir ./dist/National-Contributions-Map --public-url ./",
+    "build:app4": "parcel build National-Contributions-Table/index.html --dist-dir ./dist/National-Contributions-Table --public-url ./",
+    "build:app5": "vite build --config CRU-Timeseries/vite.config.mjs",
+    "build": "npm run build:app1 && npm run build:app1-2024 && npm run build:app2 && npm run build:app3 && npm run build:app4 && npm run build:app5"
+  },
+  "author": "Tom Jenkins",
+  "license": "ISC",
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.2.0",
+    "@mui/material": "^7.2.0",
+    "@tailwindcss/vite": "^4.1.11",
+    "bootstrap": "^5.3.3",
+    "choices.js": "^10.2.0",
+    "d3-fetch": "^3.0.1",
+    "d3-scale": "^4.0.2",
+    "echarts": "^5.6.0",
+    "echarts-for-react": "^3.0.2",
+    "leaflet": "^1.9.4",
+    "leaflet-responsive-popup": "^1.0.0",
+    "leaflet-simple-map-screenshoter": "^0.5.0",
+    "papaparse": "^5.5.3",
+    "proj4leaflet": "^1.0.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-select": "^5.10.1",
+    "react-simple-maps": "^3.0.0",
+    "react-tooltip": "^5.29.1",
+    "tabulator-tables": "^6.2.5",
+    "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@parcel/transformer-sass": "^2.15.4",
+    "@types/bootstrap": "^5.2.10",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "buffer": "^5.7.1",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^15.15.0",
+    "npm-run-all": "^4.1.5",
+    "parcel": "^2.15.4",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.13",
+    "rimraf": "^6.0.1",
+    "vite": "^6.2.0"
+  },
+  "overrides": {
+    "react-simple-maps": {
+      "d3-geo": "^3.1.0",
+      "d3-color": "^3.1.0",
+      "d3-selection": "^3.0.0",
+      "d3-zoom": "^3.0.0",
+      "react": "^16.8.0 || 17.x || 18.x || 19.x",
+      "react-dom": "^16.8.0 || 17.x || 18.x || 19.x"
+    },
+    "d3-interpolate": {
+      "d3-color": "^3.1.0"
+    },
+    "d3-transition": {
+      "d3-color": "^3.1.0"
+    }
+  }
+}

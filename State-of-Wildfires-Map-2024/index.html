@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>State of Wildfires Map 2024</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="./src/scss/styles.scss">
+        <!-- JavaScript -->
+        <script defer type="module" src="./src/js/app.js"></script>
+    </head>
+    <body>
+        <div class="container-fluid text-center">
+            <!-- Title -->
+            <h3 class="text-start">Extremes of the 2023-2024 Fire Season</h3>
+            <!-- Row: Select Input Titles -->
+            <div class="row">
+                <div class="col text-start fw-bold fs-5" style="margin-left:5px;">Variable</div>
+                <div class="col text-start fw-bold fs-5" style="margin-left:5px;">Layer</div>
+            </div>
+            <!-- Row: Select Data To Display -->
+            <div class="row py-2">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <!-- Layer Selector -->
+                    <select id="second-selector" class="form-select" style="display: none;" aria-label="second-selector">
+                        <option value="ba_anom" selected>Burned Area Anomaly</option>
+                        <option value="cem_emAn">Fire CO₂ Emissions Anomaly</option>
+                        <option value="gfa_nFAnP">Number of Fires Anomaly</option>
+                        <option value="gfa_95FAP">95ᵗʰ Percentile Fire Size Anomaly</option>
+                        <option value="gfa_95RAP">95ᵗʰ Percentile Rate of Growth Anomaly</option>
+                    </select>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <!-- Region Selector -->
+                    <select id="first-selector" class="form-select" style="display: none;" aria-label="first-selector">
+                        <!-- note: value must be the same as the geojson name property -->
+                        <option value="Continental_Biomes">Continental Biomes</option>
+                        <option value="Countries" selected>Countries</option>
+                        <option value="IPCC_WGI_regions">IPCC Regions</option>
+                        <option value="GADM_UCDavis_L1">States and Provinces</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Row: Leaflet Interactive Map -->
+            <div class="row px-2 pb-2">
+                <div id="map" style="height: 525px;"></div>
+            </div>
+            <!-- Row: Footer-->
+            <div class="row">
+                <p class="px-2 text-center text-secondary" style="font-size: 0.95em; padding-top: 5px; margin-bottom: 0px;">
+                    <span class="pe-2">
+                        <a class="text-secondary" href="https://creativecommons.org/licenses/by/4.0/deed.en" target="_blank" style="text-decoration: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cc-circle" viewBox="0 0 16 16">
+                                <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.408 5.89c-.83 0-1.318.64-1.318 1.753v.742c0 1.108.479 1.727 1.318 1.727.69 0 1.138-.435 1.187-1.05h1.147v.114c-.058 1.147-1.029 1.938-2.343 1.938-1.612 0-2.518-1.028-2.518-2.729v-.747c0-1.7.914-2.75 2.518-2.75 1.319 0 2.29.812 2.343 1.999v.11H6.595c-.049-.638-.506-1.108-1.187-1.108Zm5.404 0c-.831 0-1.319.64-1.319 1.753v.742c0 1.108.48 1.727 1.319 1.727.69 0 1.138-.435 1.186-1.05h1.147v.114c-.057 1.147-1.028 1.938-2.342 1.938-1.613 0-2.518-1.028-2.518-2.729v-.747c0-1.7.914-2.75 2.518-2.75 1.318 0 2.29.812 2.342 1.999v.11h-1.147c-.048-.638-.505-1.108-1.186-1.108Z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                            </svg>
+                            <span style="vertical-align: text-top;">CC BY 4.0</span>
+                        </a>
+                    </span>
+                    <span class="text-secondary" style="vertical-align: text-top;">Credit:</span>                  
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
+                        <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+                    </svg>
+                    <span class="pe-2" style="vertical-align: text-top;">
+                        <a class="text-secondary" href="https://doi.org/10.5194/essd-16-3601-2024" target="_blank" style="text-decoration: none;">Jones et al. (2024)</a>
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database" viewBox="0 0 16 16">
+                        <path d="M4.318 2.687C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4c0-.374.356-.875 1.318-1.313M13 5.698V7c0 .374-.356.875-1.318 1.313C10.766 8.729 9.464 9 8 9s-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777A5 5 0 0 0 13 5.698M14 4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16s3.022-.289 4.096-.777C13.125 14.755 14 14.007 14 13zm-1 4.698V10c0 .374-.356.875-1.318 1.313C10.766 11.729 9.464 12 8 12s-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10s3.022-.289 4.096-.777A5 5 0 0 0 13 8.698m0 3V13c0 .374-.356.875-1.318 1.313C10.766 14.729 9.464 15 8 15s-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13s3.022-.289 4.096-.777c.324-.147.633-.323.904-.525"/>
+                    </svg>
+                    <span class="pe-2" style="vertical-align: text-top;">
+                        <a class="text-secondary" href="https://doi.org/10.5281/zenodo.11400539" target="_blank" style="text-decoration: none;">Access Full Database</a>
+                    </span>
+                    <span class="pe-2" style="vertical-align: text-top;">
+                        <a class="text-secondary" href="https://twitter.com/Jones_MattW" target="_blank" style="text-decoration: none;">@Jones_MattW</a>
+                    </span>
+                    <span style="vertical-align: text-top;">
+                        <a class="text-secondary" href="https://tomjenkins.co.uk/" target="_blank" style="text-decoration: none;">
+                            <span>
+                                App:
+                                <svg height="15" style="margin-bottom: 4px;" xmlns="http://www.w3.org/2000/svg" version="1.0" preserveAspectRatio="xMidYMid meet" viewBox="119.9 155 272.2 202">
+                                    <g fill="#95a5a6" stroke="none" stroke-width="50" transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)">
+                                        <path d="M3570 2933 c0 -692 -3 -737 -55 -814 -13 -21 -46 -51 -72 -66 -41 -24 -59 -28 -124 -28 -67 0 -81 4 -125 30 -39 25 -56 44 -83 97 -29 58 -34 79 -39 162 l-5 96 -172 0 -173 0 5 -82 c12 -219 68 -367 181 -477 112 -110 225 -151 417 -151 63 0 137 7 174 15 148 35 271 135 341 278 74 151 73 139 77 900 l4 677 -176 0 -175 0 0 -637z"/>
+                                        <path d="M2791 3244 c-12 -15 -21 -33 -21 -40 0 -12 -127 -14 -779 -14 l-779 0 -6 -92 c-3 -51 -6 -103 -7 -116 -1 -31 28 -62 58 -62 32 0 63 17 63 35 0 8 6 15 12 15 7 0 107 -31 223 -69 115 -38 297 -97 404 -131 l194 -62 -48 -48 c-33 -33 -59 -50 -84 -55 -20 -4 -55 -15 -78 -25 l-43 -19 0 -79 c0 -43 3 -82 7 -85 3 -4 14 4 22 17 24 36 281 324 312 349 14 12 76 68 137 125 61 56 117 102 125 102 13 0 203 -208 196 -214 -2 -2 -96 -8 -207 -14 -135 -6 -208 -14 -215 -22 -12 -13 218 -8 465 9 l103 7 28 -29 c22 -23 32 -28 55 -23 31 8 62 40 62 66 0 60 -86 86 -124 37 -19 -24 -29 -27 -76 -26 l-55 1 -103 116 -103 117 155 3 156 3 0 55 c0 43 4 56 18 61 32 11 52 36 52 65 0 64 -80 92 -119 42z m-321 -230 c0 -4 -21 -25 -47 -47 -27 -23 -93 -85 -148 -139 l-100 -97 -255 80 c-390 122 -590 190 -590 200 0 5 231 9 570 9 314 0 570 -3 570 -6z"/>
+                                        <path d="M1532 2819 c-13 -5 -29 -22 -34 -37 -9 -24 -19 -30 -63 -38 -48 -9 -53 -8 -69 14 -37 49 -128 0 -112 -61 16 -65 85 -77 121 -20 16 26 29 33 70 41 42 7 53 6 70 -9 11 -10 33 -19 48 -21 25 -3 43 -25 143 -185 112 -179 114 -182 108 -228 l-7 -46 -185 -126 c-159 -108 -187 -124 -203 -115 -47 30 -99 -4 -99 -62 0 -85 124 -88 132 -3 3 29 16 41 150 132 80 55 164 112 185 127 35 25 41 26 76 15 l37 -12 0 -317 0 -318 170 0 170 0 0 575 c0 316 -4 575 -8 575 -13 0 -271 -288 -315 -350 -8 -12 -27 -22 -42 -23 -25 -2 -33 7 -83 88 -30 50 -83 135 -119 189 -57 88 -63 102 -54 123 16 36 14 51 -14 78 -26 27 -37 29 -73 14z"/>
+                                    </g>
+                                </svg>
+                                <span>Data Visualisation</span>
+                            </span>
+                            
+                        </a>
+                    </span>                  
+                </p>
+            </div>
+        </div>
+        <!-- Modal: Information About Data -->
+        <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLabel">State of Wildfires 2023-2024</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-wrap">
+                        <p class="text-start">
+                            The <span class="fw-bold">State of Wildfires report</span> (<a href="https://doi.org/10.5194/essd-16-3601-2024" target="_blank" class="text-secondary">Jones et al. 2024</a>) builds a record of extreme fires of the past fire season, analyses the causes of some key events including the role of climate change, and presents projections of future likelihood of extreme wildfire events.
+                        </p>
+                        <p class="text-start">
+                            The <span class="fw-bold">mapped data</span> are one of UEA's major contributions to the <span class="fw-bold">State of Wildfires report</span>. The new analyses are regional summaries of the estimates of <span class="fw-bold">burned area</span>, <span class="fw-bold">fire carbon emissions</span>, and <span class="fw-bold">individual fire characteristics</span> produced from <a href="https://lpdaac.usgs.gov/products/mcd64a1v061/" target="_blank" class="text-secondary">NASA</a>, the <a href="https://www.ecmwf.int/en/forecasts/dataset/global-fire-assimilation-system" target="_blank" class="text-secondary">European Centre for Medium-Range Weather Forecasting</a>, and the <a href="https://doi.org/10.5281/zenodo.11400061" target="_blank" class="text-secondary">Global Fire Atlas</a> observations. The regional summaries are provided for various different layers, including countries, level-1 global administrative regions (e.g. States of the USA, Provinces of China), biomes, and IPCC regions.
+                        </p>
+                        <p class="text-start">
+                            The <span class="fw-bold">interactive map</span> highlights regional extreme values in <span class="fw-bold">five key metrics of fire season extremity</span> during the 2023-2024 fire season, compared with previous fire seasons since 2002. Fire seasons are defined as March-February for the purposes of this report. The mapped data include <span class="fw-bold">departures in each metric from their average values</span>, expressed in relative terms (percent above or below the mean of all fire seasons since 2002). The metrics included are:
+                            <ul class="text-start">
+                                <li>Regional totals of <span class="fw-bold fst-italic">Burned Area</span>. A measure of the total extent of all fires combined in the displayed regions (input unit: km<sup>2</sup>). Positive departures mean that fires burned a larger area in the 2023-2024 fire season than usual.</li>
+                                <li>Regional totals of <span class="fw-bold fst-italic">Fire Carbon Dioxide (CO&#8322;) Emissions</span>. A measure of the amount of carbon emitted from fires into the atmosphere from all fires in the displayed regions (input unit: thousand kg of Carbon). Positive departures mean that fires emitted more carbon in the 2023-2024 fire season than usual.</li>
+                                <li>Regional <span class="fw-bold fst-italic">Number of Fires</span>. A measure of count of fires within the displayed regions (input unit: count). Positive departures mean that there were more fires during the 2023-2024 fire season than usual. [Data begins in 2003].</li>
+                                <li>Regional <span class="fw-bold fst-italic">95<sup>th</sup> Percentile Fire Size</span>. A measure of the size that the top 5% largest fires reached, assessed for each fire season (input unit: km<sup>2</sup>). Positive departures mean that the top-ranking fires during the 2023-2024 fire season were larger than usual. [Data begins in 2003].</li>
+                                <li>Regional <span class="fw-bold fst-italic">95<sup>th</sup> Percentile Fire Rate of Growth</span>. A measure of the average daily rate at which the top 5% fastest fires expanded, assessed for each fire season (input unit: km per day). Positive departures mean that the top-ranking fires during the 2023-2024 fire season were faster than usual. [Data begins in 2003].</li>
+                            </ul>  
+                        </p>
+                        <p class="text-start fw-bold">
+                            Please cite as:
+                        </p>
+                        <p class="text-start">
+                            Jones, M. W., Kelley, D. I., Burton, C. A., Di Giuseppe, F., et al. (2024) State of Wildfires 2023-24, <span class="fst-italic">Earth System Science Data</span>, <a href="https://doi.org/10.5194/essd-16-3601-2024" target="_blank" class="text-secondary">https://doi.org/10.5194/essd-16-3601-2024</a>. 
+                        </p> 
+                        <p class="text-start">
+                            Jones, M. W., Brambleby, E., Andela, N., van der Werf, G., Parrington, M., & Giglio, L. (2024). State of Wildfires 2023-24: Regional Summaries of Burned Area, Fire Emissions, and Individual Fire Characteristics for National, Administrative and Biogeographical Regions [Data set]. Zenodo. <a href="https://doi.org/10.5281/zenodo.11400539" target="_blank" class="text-secondary">https://doi.org/10.5281/zenodo.11400539</a>. 
+                        </p> 
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>                      
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </body>
+</html>
